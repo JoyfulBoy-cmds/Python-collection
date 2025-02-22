@@ -1,0 +1,35 @@
+import random
+import time
+import threading
+import sys
+
+def timeout():
+    print("Oops, it's been ten seconds!")
+    sys.exit()
+
+losses = 0
+Coins = 0
+
+while True:
+    Word = ['Animation', 'Spelling', 'Annotation', 'Notation', 'Hypothesis']
+    A = random.choice(Word)
+
+    timer = threading.Timer(10.0, timeout)
+    timer.start()
+
+    user_input = input(f'Enter the word given with only 10 seconds to look at it: {A}')
+
+    timer.cancel()
+
+    if user_input == A:
+        print("You entered the correct word!")
+        Coins += 1
+        print(f'You have {Coins} Coins')
+    else:
+        print(f"Oops, you didn't enter the correct word. The correct word was: {A}")
+        losses += 1
+
+    play_again = input("Do you want to play again? (yes/no): ").lower()
+    if play_again != "yes":
+        print(f"Thanks for playing! You earned {Coins} coins and lost {losses} Times.")
+        break
