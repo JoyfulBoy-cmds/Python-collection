@@ -1,0 +1,38 @@
+import random
+#Code by Mr.Cool.Dragon
+options = 'rock','paper','scissors'
+comp = random.choice(options)
+
+pl_choice = input('Enter options (rock paper scissors):').lower()
+print('You chose:', pl_choice)
+print(' computer chose:',comp)
+
+#if statement
+if pl_choice == comp:
+    print('Tie!')
+elif pl_choice == 'scissors' and comp == 'paper':
+    print('you win!')
+
+    #rock wins against scissors
+elif pl_choice == 'rock' and comp == 'scissors':
+    print('You win')
+
+    #paper wins against rock
+elif pl_choice == 'paper' and comp == 'rock':
+    print(' You won')
+
+    # Invalid option choice
+elif pl_choice not in options:
+    print('invalid option')
+
+    # Scissors loses to rock
+elif pl_choice == 'scissors' and comp == 'rock':
+    print('You lost!')
+
+    # Rock lost to paper
+elif pl_choice == 'rock' and comp == 'paper':
+    print('you lost!')
+
+    # scissors lost to rock
+elif pl_choice == 'scissors' and comp == 'rock':
+    print('Bruh, you lost')
