@@ -1,0 +1,117 @@
+import random
+
+# Character setup
+player = {
+    'name': 'Hero',
+    'health': 100,
+    'attack': 20,
+    'inventory': [],
+    'gold': 0
+}
+
+# Enemies setup
+enemies = [
+    {'name': 'Goblin', 'health': 30, 'attack': 10, 'reward': 10},
+    {'name': 'Troll', 'health': 50, 'attack': 15, 'reward': 20},
+    {'name': 'Dragon', 'health': 100, 'attack': 25, 'reward': 50}
+]
+
+# Dungeon setup
+rooms = ['Entrance', 'Cavern', 'Treasure Room', 'Monster Lair', 'Boss Room']
+
+
+# Function to show the player's stats
+def show_stats():
+    print(f"\n{player['name']}'s Stats: ")
+    print(f"Health: {player['health']}")
+    print(f"Attack: {player['attack']}")
+    print(f"Gold: {player['gold']}")
+    print(f"Inventory: {player['inventory']}")
+
+
+# Function to handle combat
+def combat(enemy):
+    print(f"\nA wild {enemy['name']} has appeared!")
+    while player['health'] > 0 and enemy['health'] > 0:
+        print(f"Your Health: {player['health']} | {enemy['name']}'s Health: {enemy['health']}")
+        action = input("What will you do? (Attack / Run): ").lower()
+
+        if action == 'attack':
+            damage = random.randint(player['attack'] - 5, player['attack'] + 5)
+            enemy['health'] -= damage
+            print(f"You attacked the {enemy['name']} for {damage} damage.")
+        elif action == 'run':
+            print("You attempt to flee!")
+            if random.choice([True, False]):
+                print("You successfully ran away!")
+                return False  # Fleeing ends the combat
+            else:
+                print("You failed to escape! The battle continues.")
+
+        # Enemy counterattack
+        if enemy['health'] > 0:
+            enemy_damage = random.randint(enemy['attack'] - 5, enemy['attack'] + 5)
+            player['health'] -= enemy_damage
+            print(f"The {enemy['name']} attacked you for {enemy_damage} damage.")
+
+        if player['health'] <= 0:
+            print("You have been defeated!")
+            return False
+        if enemy['health'] <= 0:
+            print(f"You defeated the {enemy['name']}!")
+            player['gold'] += enemy['reward']
+            return True
+
+
+# Function to enter a new room
+def enter_room(room):
+    print(f"\nYou have entered the {room}.")
+    if room == 'Monster Lair':
+        enemy = random.choice(enemies)
+        combat(enemy)
+    elif room == 'Treasure Room':
+        treasure = random.choice(['Gold', 'Healing Potion', 'Weapon Upgrade'])
+        print(f"You found a {treasure}!")
+        if treasure == 'Gold':
+            player['gold'] += 50
+        elif treasure == 'Healing Potion':
+            player['health'] += 30
+            print("You drank a healing potion and restored 30 health!")
+        elif treasure == 'Weapon Upgrade':
+            player['attack'] += 10
+            print("Your weapon has been upgraded! Attack increased by 10.")
+    elif room == 'Boss Room':
+        print("\nYou've reached the Boss Room!")
+        boss = {'name': 'Dark Sorcerer', 'health': 150, 'attack': 30, 'reward': 100}
+        combat(boss)
+        if player['health'] > 0:
+            print("Congratulations, you've defeated the Dark Sorcerer and won the game!")
+            return True
+    else:
+        print("Nothing of interest happens here.")
+
+
+# Start the game
+def start_game():
+    print("Welcome to the Dungeon Adventure!")
+    while player['health'] > 0:
+        show_stats()
+        print("\nYou find yourself in a dark dungeon.")
+        print("You can explore the following rooms:")
+        for i, room in enumerate(rooms):
+            print(f"{i + 1}. {room}")
+        choice = input("Which room would you like to enter? (Enter the number): ")
+
+        try:
+            choice = int(choice) - 1
+            if 0 <= choice < len(rooms):
+                if enter_room(rooms[choice]):
+                    break
+            else:
+                print("Invalid choice, try again.")
+        except ValueError:
+            print("Invalid input. Please enter a number.")
+
+
+# Run the game
+start_game()
